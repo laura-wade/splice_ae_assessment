@@ -14,7 +14,8 @@ I expanded the data to an event level to filter to sessions that had an 'Add to 
 
 >4. Now, knowing how to determine sessions with purchases vs. sessions with abandoned carts, let's wrap this up by building a data set that we think contains useful features for a model that predicts if a session will ultimately end up with an abandoned cart or a successful purchase. In this case, feel free to explore the data and add any data you think might be meaningful. You should expand your final data set to pull from bigquery-public-data.google_analytics_sample.ga_sessions*, giving you more data to work with. Please provide a brief write up of the additional columns/features you've chosen and why you think they matter.
 
-The data set I constructed is at the session level and is filtered to only sessions that had an 'Add to Cart' action. 
+The data set I constructed is at the session level and is filtered to only sessions that had an 'Add to Cart' action. I decided to dedupe the sessions because I found some fullvisitorID + visitID combinations that had > 1 visitStarTime. For these dupes I decided to take the first occurring session.
+
 Features:
 - visit_start_timestamp/visit_start_day_of_week/visit_start_hour: 
   -  There are certain times that people are more intent on making a purchase. It's possible weekends have higher intent or late nights have higher abandon rates.
