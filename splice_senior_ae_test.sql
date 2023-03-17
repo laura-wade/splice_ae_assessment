@@ -95,20 +95,18 @@ WITH add_to_cart_sessions AS (
 SELECT 
   fullVisitorId,
   visitId,
-  visitStartTime,
+  TIMESTAMP_SECONDS(visitStartTime) as visit_start_timestamp,
+  EXTRACT(DAYOFWEEK FROM TIMESTAMP_SECONDS(visitStartTime)) AS visit_start_day_of_week,
+  EXTRACT(HOUR FROM TIMESTAMP_SECONDS(visitStartTime)) AS visit_start_hour,
   device_category,
   traffic_source_medium,
   is_first_time_visitor,
-  total_transactions,
-  total_transaction_revenue,
-  num_add_to_cart_actions,
-  num_remove_from_cart_actions,
   items_in_cart,
   num_product_clicks,
   num_promotion_clicks,
   cumulative_transaction_revenue,
-  COALESCE(total_transactions > 0, FALSE) AS session_had_purchase,
-  first_visitID_with_purchase is not null and first_visitID_with_purchase <> visitID AS visitor_previously_purchased
+  first_visitID_with_purchase is not null and first_visitID_with_purchase <> visitID AS visitor_previously_purchased,
+  COALESCE(total_transactions > 0, FALSE) AS session_had_purchase
 from add_to_cart_sessions acsd
 WHERE is_first_session
 ;
