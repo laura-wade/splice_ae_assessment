@@ -1,6 +1,6 @@
 # README
 
-1. What were the number of events, unique sessions, and unique users (i.e., full visitors) that occurred in each hour? By “hour” let's assume we mean the hour in which the event occurred.
+>1. What were the number of events, unique sessions, and unique users (i.e., full visitors) that occurred in each hour? By “hour” let's assume we mean the hour in which the event occurred.
 
 Within a CTE I utilized BigQuery's UNNEST function to get the data at an event level and used DATE_ADD to calculate the event timestamp. In the final select I cohorted to the hour using DATE_TRUNC on the event_timestamp and performed the various count distincts necessary.
 
@@ -17,19 +17,18 @@ I expanded the data to an event level to filter to sessions that had an 'Add to 
 The data set I constructed is at the session level and is filtered to only sessions that had an 'Add to Cart' action. 
 Features:
 - visit_start_timestamp/visit_start_day_of_week/visit_start_hour: 
-  -  There are certain times that people are more intent on making a purchase. It could be when their paycheck hits or on weekends when they're not focused on work etc.
+  -  There are certain times that people are more intent on making a purchase. It's possible weekends have higher intent or late nights have higher abandon rates.
 - device_category: 
-  - A specific device type could have higher abandon rates due to the user experience on mobile vs desktop
+  - A specific device type could have higher abandon rates due to the user experience on mobile vs desktop.
 - traffic_source_medium: 
   - Referred traffic could have lower intent than traffic that came directly to the website.
 - is_first_time_visitor: 
   - First-time vs. Repeat visitors could have higher abandon rates due to lack of familiarity with the site/brand etc.
-- items_in_cart: 
-  - Visitors with fewer items in their cart could be more likely to purchase over Visitors who add tons of items to their cart and balk at the total price.
-- num_product_clicks: 
-- num_promotion_clicks:
+- num_product_clicks/num_promotion_clicks/num_add_to_cart_actions/num_remove_from_cart_actions:
+  - How much did the visitor/user actively interact with the site? Do product clicks show higher intent over promotion clicks? Do more cart management actions indicate higher intent?
 - cumulative_transaction_revenue:
-  - The total transaction revenue for the visitor over all prior sessions. 
+  - The total transaction revenue for the visitor over all prior sessions. If the visitor has previously spent a certain amount of money on the site are they more likely to make a purchase in that session.
 - visitor_previously_purchased: 
   - Now this one I could have just used cumulative_transaction_revenue > 0, but I wanted to use FIRST_VALUE just for the sake of displaying my SQL skills. This goes a step further from is_first_time_visitor and would help us look at the relationship between abandoning cart when a visitor previously purchased during another session.
-
+- added_top_5_abandoned_product_to_cart:
+  - Looking at the items the user added to cart, were any of these items a top 5 abandoned item in the last 30 days. For each day in the dataset I calculated the top 5 products by number of users who abandoned that item in their cart in the previous 30 days. This feature would help us determine if certain products are frequently abandoned by users.
